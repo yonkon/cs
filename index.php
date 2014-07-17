@@ -21,6 +21,7 @@ if (version_compare($php_value, '5.3.0') == -1) {
 define('AREA', 'C');
 
 try {
+    require(dirname(__FILE__) . '/app/classes/ActiveRecord/ActiveRecord.php');
 	require(dirname(__FILE__) . '/init.php');
 	fn_dispatch();
 } catch (Tygh\Exceptions\AException $e) {
