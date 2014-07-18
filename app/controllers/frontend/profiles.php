@@ -72,7 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($res) {
             list($user_id, $profile_id) = $res;
 
+            list($user_id, $profile_id) = $res;
             // Cleanup user info stored in cart
+            list($user_id, $profile_id) = $res;
             if (!empty($_SESSION['cart']) && !empty($_SESSION['cart']['user_data'])) {
                 unset($_SESSION['cart']['user_data']);
             }
