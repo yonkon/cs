@@ -5,7 +5,7 @@
     
         <form name="profiles_register_form" action="{""|fn_url}" method="post">
             {include file="views/profiles/components/profile_fields.tpl" section="C" nothing_extra="Y"}
-            {include file="views/profiles/components/profiles_account.tpl" nothing_extra="Y" location="checkout"}
+            {*{include file="views/profiles/components/profiles_account.tpl" nothing_extra="Y" location="checkout"}*}
         
             {hook name="checkout:checkout_steps"}{/hook}
 
@@ -31,10 +31,10 @@
                 <input id="default_card_id" type="hidden" value="" name="default_cc"/>
                 <input type="hidden" name="profile_id" value="{$user_data.profile_id}" />
                 {capture name="group"}
-                    {include file="views/profiles/components/profiles_account.tpl"}
+                    {*{include file="views/profiles/components/profiles_account.tpl"}*}
                     {include file="views/profiles/components/profile_fields.tpl" section="C" title=__("contact_information")}
 
-                    {if $profile_fields.B || $profile_fields.S}
+                    {if false && $profile_fields.B || $profile_fields.S}
                         {if $settings.General.user_multiple_profiles == "Y" && $runtime.mode == "update"}
                             <p>{__("text_multiprofile_notice")}</p>
                             {include file="views/profiles/components/multiple_profiles.tpl" profile_id=$user_data.profile_id}    

@@ -48,7 +48,8 @@ class Config extends Singleton
 	 *
 	 * @var array
 	 */
-	private $connections = array();
+	private $connections = array('development' => 'mysql://root:root@127.0.0.1',
+    'production' => 'mysql://ctotop39_agents:5661c4v,vG1l@127.0.0.1');
 
 	/**
 	 * Directory for the auto_loading of model classes.

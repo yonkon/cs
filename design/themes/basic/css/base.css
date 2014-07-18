@@ -1,4 +1,7 @@
 /* General styles */
+
+div[aria-describedby="rus_activate_form"] {display: none;}
+
 html, body {
     height: 100%;
 }

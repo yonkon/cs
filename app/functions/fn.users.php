@@ -457,6 +457,7 @@ function fn_fill_user_fields(&$user_data)
 
     fn_set_hook('fill_user_fields', $exclude);
 
+    $agent_fields = fn_get_table_fields('agents', $exclude); //todo make cscart compatible
     $profile_fields = fn_get_table_fields('user_profiles', $exclude);
     $fields = fn_array_merge($profile_fields, fn_get_table_fields('users', $exclude), false);
 
