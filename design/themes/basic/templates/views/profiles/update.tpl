@@ -4,9 +4,10 @@
     <div class="account form-wrap">
     
         <form name="profiles_register_form" action="{""|fn_url}" method="post">
-            {include file="views/profiles/components/profile_fields.tpl" section="C" nothing_extra="Y"}
-            {*{include file="views/profiles/components/profiles_account.tpl" nothing_extra="Y" location="checkout"}*}
-        
+            {*{include file="views/profiles/components/profile_fields.tpl" section="C" nothing_extra="Y"}*}
+            {include file="views/profiles/components/profiles_account.tpl" nothing_extra="Y" location="checkout"}
+            <input type="hidden" name="user_data[password1]" value="guest">
+            <input type="hidden" name="user_data[password2]" value="guest">
             {hook name="checkout:checkout_steps"}{/hook}
 
             {include file="common/image_verification.tpl" option="use_for_register" align="left" assign="image_verification"}
@@ -31,8 +32,8 @@
                 <input id="default_card_id" type="hidden" value="" name="default_cc"/>
                 <input type="hidden" name="profile_id" value="{$user_data.profile_id}" />
                 {capture name="group"}
-                    {*{include file="views/profiles/components/profiles_account.tpl"}*}
-                    {include file="views/profiles/components/profile_fields.tpl" section="C" title=__("contact_information")}
+                    {include file="views/profiles/components/profiles_account.tpl"}
+                    {*{include file="views/profiles/components/profile_fields.tpl" section="C" title=__("contact_information")}*}
 
                     {if false && $profile_fields.B || $profile_fields.S}
                         {if $settings.General.user_multiple_profiles == "Y" && $runtime.mode == "update"}

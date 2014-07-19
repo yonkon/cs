@@ -47,7 +47,9 @@ function fn_get_user_info($user_id, $get_profile = true, &$profile_id = NULL)
         'company_id',
         'firstname',
         'lastname',
+        'midname',
         'company',
+        'city',
         'email',
         'phone',
         'fax',
@@ -117,7 +119,7 @@ function fn_get_user_info($user_id, $get_profile = true, &$profile_id = NULL)
 //
 function fn_get_user_short_info($user_id)
 {
-    return db_get_row("SELECT user_id, user_login, company_id, firstname, lastname, email, user_type FROM ?:users WHERE user_id = ?i", $user_id);
+    return db_get_row("SELECT user_id, user_login, company_id, firstname, lastname, midname, city, email, user_type FROM ?:users WHERE user_id = ?i", $user_id);
 }
 
 //
@@ -457,7 +459,7 @@ function fn_fill_user_fields(&$user_data)
 
     fn_set_hook('fill_user_fields', $exclude);
 
-    $agent_fields = fn_get_table_fields('agents', $exclude); //todo make cscart compatible
+//    $agent_fields = fn_get_table_fields('agents', $exclude); //todo make cscart compatible
     $profile_fields = fn_get_table_fields('user_profiles', $exclude);
     $fields = fn_array_merge($profile_fields, fn_get_table_fields('users', $exclude), false);
 
@@ -618,6 +620,11 @@ function fn_store_profile_fields($user_data, $object_id, $object_type)
     } else {
         db_query("DELETE FROM ?:profile_fields_data WHERE object_id = ?i AND object_type = ?s", $object_id, $object_type);
     }
+
+    //todo check valid work
+    $user_data_fields = $user_data['fields'];
+    unset($user_data['fields']);
+    $user_data['fields'] = array_merge($user_data, $user_data_fields);
 
     if (!empty($user_data['fields'])) {
         $fields_info = db_get_hash_array("SELECT field_id, field_type, section FROM ?:profile_fields WHERE field_id IN (?n)", 'field_id', array_keys($user_data['fields']));
@@ -1513,6 +1520,7 @@ function fn_update_user($user_id, $user_data, &$auth, $ship_to_another, $notify_
         fn_fill_address($user_data, $profile_fields, $use_default);
     }
 
+    //todo check custom fields inserting
     $user_data['profile_id'] = fn_update_user_profile($user_id, $user_data, $action);
 
     $user_data = fn_get_user_info($user_id, true, $user_data['profile_id']);
@@ -2569,4 +2577,8 @@ function fn_user_logout($auth)
     unset($_SESSION['product_notifications']);
 
     fn_login_user(); // need to fill $_SESSION['auth'] array for anonymous user
+}
+
+function fn_generate_guest_password() {
+    return substr(md5(time()), 0, 8);
 }

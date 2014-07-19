@@ -35,6 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!$is_update) {
             $is_valid_user_data = true;
 
+            //todo make password generation better
+            $_REQUEST['user_data']['password2'] = $_REQUEST['user_data']['password1'] = fn_generate_guest_password();
+
             if (empty($_REQUEST['user_data']['email'])) {
                 fn_set_notification('W', __('warning'), __('error_validator_required', array('[field]' => __('email'))));
                 $is_valid_user_data = false;
@@ -72,9 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($res) {
             list($user_id, $profile_id) = $res;
 
-            list($user_id, $profile_id) = $res;
+//            list($user_id, $profile_id) = $res;
             // Cleanup user info stored in cart
-            list($user_id, $profile_id) = $res;
+//            list($user_id, $profile_id) = $res;
             if (!empty($_SESSION['cart']) && !empty($_SESSION['cart']['user_data'])) {
                 unset($_SESSION['cart']['user_data']);
             }

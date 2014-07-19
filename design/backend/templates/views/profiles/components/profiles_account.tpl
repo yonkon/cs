@@ -89,3 +89,32 @@
     </select>
     </div>
 </div>
+
+<div class="clearfix">
+    <div class="control-group profile-field-wrap first-name">
+        <label for="firstname" class="control-label cm-required ">Имя</label>
+        <input x-autocompletetype="given-name" type="text" id="firstname" name="user_data[firstname]" size="32" value="{$user_data.firstname}"
+        class="input-text ">
+    </div>
+    <div class="control-group profile-field-wrap last-name">
+        <label for="lastname" class="control-label cm-required ">Фамилия</label>
+        <input x-autocompletetype="surname" type="text" id="lastname" name="user_data[lastname]" size="32" value="{$user_data.lastname}"
+               class="input-text ">
+    </div>
+    <div class="control-group profile-field-wrap mid-name">
+        <label for="midname" class="control-label cm-required ">Отчество</label>
+        <input type="text" id="midname" name="user_data[midname]" size="32" value="{$user_data.midname}"
+               class="input-text ">
+    </div>
+    <div class="control-group profile-field-wrap city">
+        <label for="city" class="control-label cm-required ">Ваш город</label>
+        <input type="text" id="city" name="user_data[city]" size="32" value="{$user_data.city}"
+               class="input-text ">
+    </div>
+    <div class="control-group profile-field-wrap phone">
+        <label for="phone" class="control-label cm-required ">Ваш телефон</label>
+        <input x-autocompletetype="phone-full" type="text" id="phone" name="user_data[phone]" size="32" value="{$user_data.phone}"
+               class="input-text ">
+    </div>
+
+</div>
