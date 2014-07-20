@@ -3,6 +3,7 @@
 use Tygh\Registry;
 use Tygh\Session;
 use Tygh\Mailer;
+use Agent;
 
 if (!defined('BOOTSTRAP')) { die('Access denied'); }
 
@@ -139,24 +140,35 @@ if ($mode == 'add') {
     if (empty($auth['user_id'])) {
         return array(CONTROLLER_STATUS_REDIRECT, "auth.login_form?return_url=".urlencode(Registry::get('config.current_url')));
     }
+    Registry::get('view')->assign('content_tpl', 'views/agents/update_subagent.tpl');
 
-    $profile_id = empty($_REQUEST['profile_id']) ? 0 : $_REQUEST['profile_id'];
+    $profile_id = null; /*empty($_REQUEST['profile_id']) ? 0 : $_REQUEST['profile_id'];*/
     fn_add_breadcrumb(__('editing_profile'));
 
-    if (!empty($_REQUEST['profile']) && $_REQUEST['profile'] == 'new') {
-        $user_data = fn_get_user_info($auth['user_id'], false);
-    } else {
-        $user_data = fn_get_user_info($auth['user_id'], true, $profile_id);
-    }
+//    if (!empty($_REQUEST['profile']) && $_REQUEST['profile'] == 'new') {
+//        $user_data = fn_get_user_info($auth['user_id'], false);
+//    } else {
+//        $user_data = fn_get_user_info($auth['user_id'], true, $profile_id);
+//    }
+
+    $user_data = fn_get_agent_by_id($auth['user_id']);
 
     if (empty($user_data)) {
         return array(CONTROLLER_STATUS_NO_PAGE);
     }
-
+    if(empty ($_REQUEST['user_data'])) {
+//        Registry::get('view')->display('views/agents/update_subagent.tpl');
+        return array(CONTROLLER_STATUS_OK);
+    }
+    $subagent_data = $_REQUEST['user_data'];
+    $subagent_data['curator_id'] = $user_data['user_id'];
+    $subagent_data['company_id'] = $user_data['company_id'];
+    $subagent_data['company'] = $user_data['company'];
     $restored_user_data = fn_restore_post_data('user_data');
     if ($restored_user_data) {
-        $user_data = fn_array_merge($user_data, $restored_user_data);
+        $subagent_data = fn_array_merge($subagent_data, $restored_user_data);
     }
+    $res = fn_update_user(null, $subagent_data, $auth, !empty($_REQUEST['ship_to_another']), true);
 
     Registry::set('navigation.tabs.general', array (
         'title' => __('general'),
@@ -180,7 +192,7 @@ if ($mode == 'add') {
         }
     }
 
-    $profile_fields = fn_get_profile_fields();
+    $profile_fields = array();
 
     Registry::get('view')->assign('profile_fields', $profile_fields);
     Registry::get('view')->assign('user_data', $user_data);
@@ -190,6 +202,7 @@ if ($mode == 'add') {
     if (Registry::get('settings.General.user_multiple_profiles') == 'Y') {
         Registry::get('view')->assign('user_profiles', fn_get_user_profiles($auth['user_id']));
     }
+
 } elseif ($mode == 'update') {
 
     if (empty($auth['user_id'])) {
@@ -318,4 +331,11 @@ function fn_request_usergroup($user_id, $usergroup_id, $type)
     }
 
     return $success;
+}
+
+
+function fn_get_agent_by_id($id) {
+    $agent = db_get_row('SELECT * FROM ?:users WHERE user_id = ?i', $id );
+
+    return $agent;
 }
