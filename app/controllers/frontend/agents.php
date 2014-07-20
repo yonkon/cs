@@ -135,6 +135,61 @@ if ($mode == 'add') {
     Registry::get('view')->assign('countries', fn_get_simple_countries(true, CART_LANGUAGE));
     Registry::get('view')->assign('states', fn_get_all_states());
 
+} elseif ($mode == 'add_subagent') {
+    if (empty($auth['user_id'])) {
+        return array(CONTROLLER_STATUS_REDIRECT, "auth.login_form?return_url=".urlencode(Registry::get('config.current_url')));
+    }
+
+    $profile_id = empty($_REQUEST['profile_id']) ? 0 : $_REQUEST['profile_id'];
+    fn_add_breadcrumb(__('editing_profile'));
+
+    if (!empty($_REQUEST['profile']) && $_REQUEST['profile'] == 'new') {
+        $user_data = fn_get_user_info($auth['user_id'], false);
+    } else {
+        $user_data = fn_get_user_info($auth['user_id'], true, $profile_id);
+    }
+
+    if (empty($user_data)) {
+        return array(CONTROLLER_STATUS_NO_PAGE);
+    }
+
+    $restored_user_data = fn_restore_post_data('user_data');
+    if ($restored_user_data) {
+        $user_data = fn_array_merge($user_data, $restored_user_data);
+    }
+
+    Registry::set('navigation.tabs.general', array (
+        'title' => __('general'),
+        'js' => true
+    ));
+
+    $show_usergroups = true;
+    if (Registry::get('settings.General.allow_usergroup_signup') != 'Y') {
+        $show_usergroups = fn_user_has_active_usergroups($user_data);
+    }
+
+    if ($show_usergroups) {
+        $usergroups = fn_get_usergroups('C');
+        if (!empty($usergroups)) {
+            Registry::set('navigation.tabs.usergroups', array (
+                'title' => __('usergroups'),
+                'js' => true
+            ));
+
+            Registry::get('view')->assign('usergroups', $usergroups);
+        }
+    }
+
+    $profile_fields = fn_get_profile_fields();
+
+    Registry::get('view')->assign('profile_fields', $profile_fields);
+    Registry::get('view')->assign('user_data', $user_data);
+    Registry::get('view')->assign('ship_to_another', fn_check_shipping_billing($user_data, $profile_fields));
+    Registry::get('view')->assign('countries', fn_get_simple_countries(true, CART_LANGUAGE));
+    Registry::get('view')->assign('states', fn_get_all_states());
+    if (Registry::get('settings.General.user_multiple_profiles') == 'Y') {
+        Registry::get('view')->assign('user_profiles', fn_get_user_profiles($auth['user_id']));
+    }
 } elseif ($mode == 'update') {
 
     if (empty($auth['user_id'])) {

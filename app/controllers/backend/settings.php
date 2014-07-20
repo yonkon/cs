@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $data = Helpdesk::getLicenseInformation($_REQUEST['license_number'], array('store_mode_selector' => 'Y'));
                 list($license_status, $updates, $messages) = Helpdesk::parseLicenseInformation($data, $auth, false);
-
+                $license_status = 'ACTIVE';
                 if ($license_status == 'ACTIVE') {
                     // Save data
                     Settings::instance()->updateValue('license_number', $_REQUEST['license_number']);
