@@ -4,10 +4,13 @@
     <div class="account form-wrap">
 
         <form name="profiles_register_form" action="{""|fn_url}" method="post">
-            {*{include file="views/profiles/components/profile_fields.tpl" section="C" nothing_extra="Y"}*}
-            {include file="views/profiles/components/profiles_account.tpl" nothing_extra="Y" location="checkout"}
+            {*{include file="views/agents/components/profile_fields.tpl" section="C" nothing_extra="Y"}*}
+            {include file="views/agents/components/profiles_account.tpl" nothing_extra="Y" location="checkout"}
             <input type="hidden" name="user_data[password1]" value="guest">
             <input type="hidden" name="user_data[password2]" value="guest">
+            <input type="hidden" name="user_data[curator_id]" value="{$user_data.curator_id}">
+            <input type="hidden" name="user_data[company]" value="{$user_data.company}">
+            <input type="hidden" name="user_data[company_id]" value="{$user_data.company_id}">
             {hook name="checkout:checkout_steps"}{/hook}
 
             {include file="common/image_verification.tpl" option="use_for_register" align="left" assign="image_verification"}
@@ -18,7 +21,7 @@
             {/if}
 
             <div class="buttons-container left">
-                {include file="buttons/register_profile.tpl" but_name="dispatch[profiles.update]"}
+                {include file="buttons/register_profile.tpl" but_name="dispatch[agents.update]"}
             </div>
         </form>
     </div>
@@ -32,13 +35,13 @@
                 <input id="default_card_id" type="hidden" value="" name="default_cc"/>
                 <input type="hidden" name="profile_id" value="{$user_data.profile_id}" />
                 {capture name="group"}
-                    {include file="views/profiles/components/profiles_account.tpl"}
-                    {*{include file="views/profiles/components/profile_fields.tpl" section="C" title=__("contact_information")}*}
+                    {include file="views/agents/components/profiles_account.tpl"}
+                    {*{include file="views/agents/components/profile_fields.tpl" section="C" title=__("contact_information")}*}
 
                     {if false && $profile_fields.B || $profile_fields.S}
                         {if $settings.General.user_multiple_profiles == "Y" && $runtime.mode == "update"}
                             <p>{__("text_multiprofile_notice")}</p>
-                            {include file="views/profiles/components/multiple_profiles.tpl" profile_id=$user_data.profile_id}
+                            {include file="views/agents/components/multiple_profiles.tpl" profile_id=$user_data.profile_id}
                         {/if}
 
                         {if $settings.General.address_position == "billing_first"}
@@ -55,9 +58,15 @@
                             {assign var="body_id" value="ba"}
                         {/if}
 
-                        {include file="views/profiles/components/profile_fields.tpl" section=$first_section body_id="" ship_to_another=true title=$first_section_text}
-                        {include file="views/profiles/components/profile_fields.tpl" section=$sec_section body_id=$body_id ship_to_another=true title=$sec_section_text address_flag=$profile_fields|fn_compare_shipping_billing ship_to_another=$ship_to_another}
+                        {include file="views/agents/components/profile_fields.tpl" section=$first_section body_id="" ship_to_another=true title=$first_section_text}
+                        {include file="views/agents/components/profile_fields.tpl" section=$sec_section body_id=$body_id ship_to_another=true title=$sec_section_text address_flag=$profile_fields|fn_compare_shipping_billing ship_to_another=$ship_to_another}
                     {/if}
+
+                    <input type="hidden" name="user_data[password1]" value="guest">
+                    <input type="hidden" name="user_data[password2]" value="guest">
+                    <input type="hidden" name="user_data[curator_id]" value="{$user_data.curator_id}">
+                    <input type="hidden" name="user_data[company]" value="{$user_data.company}">
+                    <input type="hidden" name="user_data[company_id]" value="{$user_data.company_id}">
 
                     {hook name="profiles:account_update"}
                     {/hook}
@@ -69,9 +78,9 @@
 
                 <div class="buttons-container left">
                     {if $runtime.mode == "add"}
-                        {include file="buttons/register_profile.tpl" but_name="dispatch[profiles.update]" but_id="save_profile_but"}
+                        {include file="buttons/register_profile.tpl" but_name="dispatch[agents.update]" but_id="save_profile_but"}
                     {else}
-                        {include file="buttons/save.tpl" but_name="dispatch[profiles.update]" but_id="save_profile_but"}
+                        {include file="buttons/save.tpl" but_name="dispatch[agents.update]" but_id="save_profile_but"}
                         <input class="account-cancel" type="reset" name="reset" value="{__("revert")}" id="shipping_address_reset"/>
 
                         <script type="text/javascript">
@@ -134,7 +143,7 @@
                                             </td>
                                             {if $settings.General.allow_usergroup_signup == "Y"}
                                                 <td>
-                                                    <a class="cm-ajax" data-ca-target-id="content_usergroups" href="{"profiles.usergroups?usergroup_id=`$usergroup.usergroup_id`&type=`$_req_type`"|fn_url}">{$_link_text}</a>
+                                                    <a class="cm-ajax" data-ca-target-id="content_usergroups" href="{"agents.usergroups?usergroup_id=`$usergroup.usergroup_id`&type=`$_req_type`"|fn_url}">{$_link_text}</a>
                                                 </td>
                                             {/if}
                                         </tr>

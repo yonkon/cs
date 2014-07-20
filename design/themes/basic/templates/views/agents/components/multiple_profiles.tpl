@@ -17,7 +17,7 @@
         {if !$smarty.foreach.pfe.last}&nbsp;|&nbsp;{/if}
 
         {if $up.profile_type != "P" && !$hide_profile_delete}
-            {include file="buttons/button.tpl" but_meta="cm-confirm" but_target_id="checkout_steps,cart_items,checkout_totals" but_role="delete" but_text="&nbsp;" but_href="profiles.delete_profile?profile_id=`$up.profile_id`"}
+            {include file="buttons/button.tpl" but_meta="cm-confirm" but_target_id="checkout_steps,cart_items,checkout_totals" but_role="delete" but_text="&nbsp;" but_href="agents.delete_profile?profile_id=`$up.profile_id`"}
         {/if}
     {/foreach}
     {if !$skip_create}
