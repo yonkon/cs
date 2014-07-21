@@ -1,0 +1,1 @@
+ALTER TABLE `cscart_suppliers` ADD `description` TEXT NOT NULL , ADD `logo` VARCHAR(256) NOT NULL ;

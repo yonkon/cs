@@ -1621,3 +1621,17 @@ function add_images_to_products(&$products, $groupById = true) {
         $products[$idToProduct[$image['object_id']]]['image'] = $image;
     }
 }
+
+function add_images_to_company(&$products, $groupById = true) {
+    $productsIds = array();
+    $idToProduct = array();
+    foreach($products as $k => $product) {
+        $productsIds[] = $product['product_id'];
+        $idToProduct[$product['product_id']] = $k;
+    }
+    $images = db_get_array('SELECT description, logo FROM cscart_suppliers WHERE company_id in ('. implode(',' , $productsIds).')  ' . ($groupById? ' GROUP by object_id' : '') );
+
+    foreach($images as $image) {
+        $products[$idToProduct[$image['object_id']]]['image'] = $image;
+    }
+}

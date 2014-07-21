@@ -41,7 +41,7 @@
         {assign var="statuses" value=$smarty.const.STATUSES_ORDER|fn_get_simple_statuses}
     
         <div class="control-group">
-            <label class="control-label" for="elm_2co_fraud_wait">{__("2co_fraud_wait")}:</label>
+            <label class="control-label" for="elm_2co_fraud_wait">{__(">?2co_fraud_wait")}:</label>
             <div class="controls">
                 <select name="payment_data[processor_params][fraud_wait]" id="elm_2co_fraud_wait">
                     {foreach from=$statuses item="s" key="k"}
