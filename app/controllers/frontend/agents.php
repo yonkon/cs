@@ -3,7 +3,6 @@
 use Tygh\Registry;
 use Tygh\Session;
 use Tygh\Mailer;
-use Agent;
 
 if (!defined('BOOTSTRAP')) { die('Access denied'); }
 
@@ -136,7 +135,8 @@ if ($mode == 'add') {
     Registry::get('view')->assign('countries', fn_get_simple_countries(true, CART_LANGUAGE));
     Registry::get('view')->assign('states', fn_get_all_states());
 
-} elseif ($mode == 'add_subagent') {
+}
+elseif ($mode == 'add_subagent') {
     if (empty($auth['user_id'])) {
         return array(CONTROLLER_STATUS_REDIRECT, "auth.login_form?return_url=".urlencode(Registry::get('config.current_url')));
     }
@@ -205,7 +205,8 @@ if ($mode == 'add') {
         Registry::get('view')->assign('user_profiles', fn_get_user_profiles($subagent_data['user_id']));
     }
 
-} elseif ($mode == 'update') {
+}
+elseif ($mode == 'update') {
 
     if (empty($auth['user_id'])) {
         return array(CONTROLLER_STATUS_REDIRECT, "auth.login_form?return_url=".urlencode(Registry::get('config.current_url')));
@@ -262,7 +263,8 @@ if ($mode == 'add') {
         Registry::get('view')->assign('user_profiles', fn_get_user_profiles($auth['user_id']));
     }
 
-}  elseif ($mode == 'usergroups') {
+}
+elseif ($mode == 'usergroups') {
     if (empty($auth['user_id']) || empty($_REQUEST['type']) || empty($_REQUEST['usergroup_id'])) {
         return array(CONTROLLER_STATUS_DENIED);
     }
@@ -293,9 +295,11 @@ if ($mode == 'add') {
     }
 
     fn_add_breadcrumb(__('registration'));
-} elseif($mode == 'office') {
+}
+elseif($mode == 'office') {
     return array(CONTROLLER_STATUS_OK);
-} elseif($mode == 'companies_and_products') {
+}
+elseif($mode == 'companies_and_products') {
     $products = fn_agent_get_products(null, 10 );
     Registry::get('view')->assign('products', $products[0]);
     Registry::get('view')->assign('products_param', $products[1]);
@@ -303,7 +307,9 @@ if ($mode == 'add') {
     Registry::get('view')->assign('content_tpl', 'views/agents/office.tpl');
     return array(CONTROLLER_STATUS_OK);
 }
-
+elseif ($mode == 'order_make') {
+    return array(CONTROLLER_STATUS_OK);
+}
         /**
          * Requests usergroup for customer
          *
@@ -1550,6 +1556,9 @@ function fn_agent_get_products($params, $items_per_page = 0, $lang_code = CART_L
         $having = '';
     }
 
+    //TODO check valid processing
+
+
     $products = db_get_array("SELECT $calc_found_rows " . implode(', ', $fields) . " FROM ?:products as products $join WHERE 1 $condition GROUP BY $group_by $having $sorting $limit");
 
     if (!empty($params['items_per_page'])) {
@@ -1564,6 +1573,7 @@ function fn_agent_get_products($params, $items_per_page = 0, $lang_code = CART_L
             list($products[$k]['category_ids'], $products[$k]['main_category']) = fn_convert_categories($v['category_ids']);
         }
     }
+    add_images_to_products($products);
 
     if (!empty($params['get_frontend_urls'])) {
         foreach ($products as &$product) {
@@ -1578,6 +1588,7 @@ function fn_agent_get_products($params, $items_per_page = 0, $lang_code = CART_L
         $products = fn_sort_by_ids($products, $params['pid']);
     }
 
+
     /**
      * Changes selected products
      *
@@ -1590,4 +1601,19 @@ function fn_agent_get_products($params, $items_per_page = 0, $lang_code = CART_L
 //    LastView::instance()->processResults('products', $products, $params);
 
     return array($products, $params);
+}
+
+
+function add_images_to_products(&$products, $groupById = true) {
+    $productsIds = array();
+    $idToProduct = array();
+    foreach($products as $k => $product) {
+        $productsIds[] = $product['product_id'];
+        $idToProduct[$product['product_id']] = $k;
+    }
+    $images = db_get_array('SELECT il.object_id, il.detailed_id, i.* FROM cscart_images_links il left JOIN cscart_images i ON i.image_id = il.detailed_id WHERE il.object_id in ('. implode(',' , $productsIds).') AND object_type = "product" ' . ($groupById? ' GROUP by object_id' : '') );
+
+    foreach($images as $image) {
+        $products[$idToProduct[$image['object_id']]]['image'] = $image;
+    }
 }

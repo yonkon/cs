@@ -21,14 +21,32 @@
             <option>Other city2</option>
         </select>
     </div>
-    <form>
+
     {foreach from=$products item="product"}
+    <form>
+        <input type="hidden" name="product_id" value="{$product.product_id}">
+        <input type="hidden" name="dispatch" value="agent.order_make">
     <div class="product_div">
         <table>
             <tr>
-                <td> <img src="{$product.image}"></td>
-                <td colspan="2"><h2><a href="{"products.view"|fn_url}&product_id={$product.product_id}">{$product.product}</a></h2></td>
-                <td><div><a href="#">+</a><a href="#">-</a></div><span>{$product.price|floatval}$</span><div><button type="submit" name="dispatch[checkout.add..{$product.product_id}]" value="Оформить заявку">Оформить заявку</button></div><div>{if $product.shipping}<img src="shipping.png">{/if}</div></td>
+                <td> <img class="product-image" src="/images/detailed/0/{$product.image.image_path}"></td>
+                <td colspan="2">
+                    <h2><a href="{"products.view"|fn_url}&product_id={$product.product_id}">{$product.product}</a></h2>
+                    <div class="'product-description">{$product.full_description|unescape}</div>
+                </td>
+                <td>
+                    <div class="product-count-buttons">
+                        <a href="#" class="increase" onclick="increase_count({$product.product_id}, 1, {$product.price});">+</a>
+                        <a href="#" class="decrease" onclick="increase_count({$product.product_id}, -1,{$product.price});">-</a>
+                        <input type="hidden" id="item_{$product.product_id}_count" value='1' >
+                    </div>
+                    <span id="item_{$product.product_id}_count" class="price">{$product.price|floatval}$</span>
+                    <div>
+                        <button type="submit" name="checkout" value="Оформить заявку">Оформить заявку</button>
+                    </div>
+                    <div class="shipping">{if true || $product.free_shipping || $product.edp_shipping || $product.shipping_freight}<img class="shipping-img" src="design/themes/basic/templates/views/agents/images/shipping.png">{/if}
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td>{if $product.company.logo}<img src="{$product.company.logo}">{/if}</td>
@@ -36,6 +54,6 @@
                 <td><span>{$product.profit}</span><br><button>Сохранить в кабинете</button></td>
             </tr>
         </table>
-</div>
+    </div>
+</form>
 {/foreach}
-    </form>
