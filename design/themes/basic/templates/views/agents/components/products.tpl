@@ -25,7 +25,7 @@
     {foreach from=$products item="product"}
     <form>
         <input type="hidden" name="product_id" value="{$product.product_id}">
-        <input type="hidden" name="dispatch" value="agent.order_make">
+        <input type="hidden" name="dispatch" value="agents.order_make">
     <div class="product_div">
         <table>
             <tr>
