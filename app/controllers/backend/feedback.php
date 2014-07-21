@@ -31,7 +31,7 @@ if ($mode == 'prepare') {
     Registry::get('view')->assign("fdata", $fdata);
 
 } elseif ($mode == 'send') {
-    $res = Http::post("http://www.cs-cart.com/index.php?dispatch=feedback", array('fdata' => $fdata), array(
+    $res = Http::post(''/*"http://www.cs-cart.com/index.php?dispatch=feedback"*/, array('fdata' => $fdata), array(
         'headers' => array(
             'Expect: '
         )

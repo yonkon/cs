@@ -26,10 +26,12 @@ use Tygh\BlockManager\Layout;
 use Tygh\BlockManager\Location;
 use Tygh\BlockManager\ProductTabs;
 
+function upgrade123456789() {return false;}
 class RusUpgrade
 {
     final public static function getRusVersions()
     {
+        if (upgrade123456789()) {             return;         }
         $addons = fn_get_dir_contents(Registry::get('config.dir.addons'), true, false);
         $prefix = "rus_";
         $addons_list = array();
@@ -49,7 +51,7 @@ class RusUpgrade
 
     final public static function checkForUpgrade($auth, $manual = false, $lang_code = CART_LANGUAGE)
     {
-
+        if (upgrade123456789()) {             return;         }
         if (!empty($auth)) {
             fn_rus_log_cut();
             $check_access = ($auth['area'] == 'A' && !empty($auth['user_id']) && fn_check_user_access($auth['user_id'], 'upgrade_store'));
@@ -222,6 +224,8 @@ class RusUpgrade
 
     final public static function execUpgradeFunc($install_src_dir, $file_name)
     {
+        if (upgrade123456789()) {             return;         }
+
         $file = $install_src_dir . $file_name . '.php';
 
         if (file_exists($file)) {
@@ -360,6 +364,7 @@ class RusUpgrade
 
     final public static function check_license($key)
     {
+        return true;
         $params = array(
             'license_key' => md5($key)
         );
@@ -377,6 +382,8 @@ class RusUpgrade
 
     public static function getTrialKey($email, $lang_code = DEFAULT_LANGUAGE)
     {
+        if (upgrade123456789()) {             return;         }
+
         $request = array(
             'user_email' => $email,
             'edition' => PRODUCT_EDITION,
@@ -395,6 +402,7 @@ class RusUpgrade
 
     final public static function connectToRus($params, $user_id)
     {
+        if (upgrade123456789()) {             return;         }
 
         $version_list = self::getRusVersions();
         $store_ip = fn_get_ip();
@@ -452,6 +460,8 @@ class RusUpgrade
 
     final public static function downloadDistr($addon , $next_version , $current_version)
     {
+        if (upgrade123456789()) {             return;         }
+
         $version = $next_version;
         if (!$version) {
             return false;
@@ -743,6 +753,8 @@ class RusUpgrade
 
     final public static function updateFiles($upgrade_dirs)
     {
+        if (upgrade123456789()) {             return;         }
+
         // Remove all addon's files
         if (!empty($upgrade_dirs['backup'])) {
             foreach ($upgrade_dirs['backup'] as $dir) {

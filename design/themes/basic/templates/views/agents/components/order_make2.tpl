@@ -1,18 +1,22 @@
 <div id="order_make_div">
 <input type="hidden" value="{$step}">
     <div id="order_make_top">
-        <h2 class="lightbox-header-text">{__('New order - Main info')}</h2>
+        <h2 class="lightbox-header-text">{__('New order - Approvement')}</h2>
         <img src="/images/close.png" class="close" alt="{__('close')}">
-        <p class="graytext">{__('Fill client data please')}</p>
+        <p>{__('Verify client data please')}</p>
     </div>
     <div id="order_make_content">
         <div>
-            <label for="client_fio">{__('FIO')}</label>
-            <input id="client_fio" name="client[fio]" value="{$client.fio }">
+            <span>{__('FIO')}</span>
+            <span id="client_fio" >{$client.fio }</span>
         </div>
         <div>
-            <label for="client_phone">{__('Phone')}</label>
-            <input id="client_phone" name="client[phone]" value="{$client.phone }">
+            <span>{__(address)}</span>
+            <span id="client_address">{$client.phone } </span>
+        </div>
+        <div>
+            <span>{__('Phone')}</span>
+            <span id="client_phone">{$client.phone } </span>
         </div>
         <div>
             <span>{__('Contact phone number for order approvement')}</span>

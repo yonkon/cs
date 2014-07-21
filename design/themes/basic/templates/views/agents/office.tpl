@@ -58,7 +58,11 @@
     {if $mode == 'products'}
         {include file="views/agents/components/products.tpl"}
     {elseif $mode == 'order_make'}
-        {include file="views/agents/components/order_make.tpl"}
+        {if $step == 1}
+            {include file="views/agents/components/order_make.tpl"}
+        {elseif $step == 2 }
+            {include file="views/agents/components/order_make2.tpl"}
+        {/if}
     {/if}
 </div>
 

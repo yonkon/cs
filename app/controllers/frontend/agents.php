@@ -308,6 +308,8 @@ elseif($mode == 'companies_and_products') {
     return array(CONTROLLER_STATUS_OK);
 }
 elseif ($mode == 'order_make') {
+    $step = $_REQUEST['step'] ? intval($_REQUEST['step'])+1 : 1;
+    Registry::get('view')->assign('step', $step );
     Registry::get('view')->assign('mode', 'order_make');
     Registry::get('view')->assign('content_tpl', 'views/agents/office.tpl');
     return array(CONTROLLER_STATUS_OK);
