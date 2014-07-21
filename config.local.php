@@ -20,7 +20,7 @@ if (!defined('BOOTSTRAP')) { die('Access denied'); }
 
 // Log everything, but do not display
 error_reporting(E_ALL);
-ini_set('display_errors', 0);
+//ini_set('display_errors', 0);
 
 // Set maximum memory limit
 if (PHP_INT_SIZE == 4 && (substr(ini_get('memory_limit'), 0, -1) < "64")) {

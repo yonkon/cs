@@ -21,16 +21,16 @@ if (version_compare($php_value, '5.3.0') == -1) {
 define('AREA', 'C');
 define('_ROOT_DIR_', dirname(__FILE__));
 try {
-    require(_ROOT_DIR_ . '/app/classes/ActiveRecord/ActiveRecord.php');
-
-    ActiveRecord\Config::initialize(function($cfg)
-    {
-        $cfg->set_model_directory(_ROOT_DIR_ . '/app/classes/ActiveRecord/models');
-        $cfg->set_connections(array('development' => 'mysql://root:root@127.0.0.1'));
-
-        // you can change the default connection with the below
-        //$cfg->set_default_connection('production');
-    });
+//    require(_ROOT_DIR_ . '/app/classes/ActiveRecord/ActiveRecord.php');
+//
+//    ActiveRecord\Config::initialize(function($cfg)
+//    {
+//        $cfg->set_model_directory(_ROOT_DIR_ . '/app/classes/ActiveRecord/models');
+//        $cfg->set_connections(array('development' => 'mysql://root:root@127.0.0.1'));
+//
+//        // you can change the default connection with the below
+//        //$cfg->set_default_connection('production');
+//    });
 
 	require(dirname(__FILE__) . '/init.php');
 	fn_dispatch();
